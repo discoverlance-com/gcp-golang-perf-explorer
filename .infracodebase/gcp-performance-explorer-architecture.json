@@ -1,0 +1,178 @@
+{
+  "nodes": [
+    {
+      "id": "gcp-project",
+      "label": "Google Cloud Project",
+      "subtitle": "performance-explorer",
+      "icon": "/icons/gcp/gcp.png",
+      "type": "container",
+      "borderStyle": "solid"
+    },
+    {
+      "id": "artifact-registry",
+      "label": "Artifact Registry",
+      "subtitle": "Container Images",
+      "icon": "/icons/gcp/devtools/container-registry.png",
+      "parentNode": "gcp-project"
+    },
+    {
+      "id": "firestore",
+      "label": "Firestore Database",
+      "subtitle": "Native Mode",
+      "icon": "/icons/gcp/database/firestore.png",
+      "parentNode": "gcp-project"
+    },
+    {
+      "id": "go-sa",
+      "label": "Service Account",
+      "subtitle": "Go App SA",
+      "icon": "/icons/gcp/security/iam.png",
+      "parentNode": "gcp-project"
+    },
+    {
+      "id": "node-sa",
+      "label": "Service Account",
+      "subtitle": "Node.js App SA",
+      "icon": "/icons/gcp/security/iam.png",
+      "parentNode": "gcp-project"
+    },
+    {
+      "id": "go-app",
+      "label": "Cloud Run Service",
+      "subtitle": "Go Task App",
+      "icon": "/icons/gcp/compute/run.png",
+      "parentNode": "gcp-project"
+    },
+    {
+      "id": "node-app",
+      "label": "Cloud Run Service",
+      "subtitle": "Node.js Task App",
+      "icon": "/icons/gcp/compute/run.png",
+      "parentNode": "gcp-project"
+    },
+    {
+      "id": "cloud-trace",
+      "label": "Cloud Trace",
+      "subtitle": "Performance Monitoring",
+      "icon": "/icons/gcp/operations/monitoring.png",
+      "parentNode": "gcp-project"
+    },
+    {
+      "id": "cloud-logging",
+      "label": "Cloud Logging",
+      "subtitle": "Application Logs",
+      "icon": "/icons/gcp/operations/logging.png",
+      "parentNode": "gcp-project"
+    },
+    {
+      "id": "users",
+      "label": "Users",
+      "subtitle": "HTTP Requests",
+      "icon": "/icons/gcp/gcp.png"
+    },
+    {
+      "id": "kms-keyring",
+      "label": "KMS Key Ring",
+      "subtitle": "Encryption Keys",
+      "icon": "/icons/gcp/security/key-management-service.png",
+      "parentNode": "gcp-project"
+    },
+    {
+      "id": "kms-key",
+      "label": "KMS Crypto Key",
+      "subtitle": "90-day rotation",
+      "icon": "/icons/gcp/security/key-management-service.png",
+      "parentNode": "gcp-project"
+    }
+  ],
+  "edges": [
+    {
+      "id": "users-to-go",
+      "source": "users",
+      "target": "go-app",
+      "label": "HTTPS (auth required)"
+    },
+    {
+      "id": "users-to-node",
+      "source": "users",
+      "target": "node-app",
+      "label": "HTTPS (auth required)"
+    },
+    {
+      "id": "go-app-firestore",
+      "source": "go-app",
+      "target": "firestore",
+      "label": "reads/writes tasks"
+    },
+    {
+      "id": "node-app-firestore",
+      "source": "node-app",
+      "target": "firestore",
+      "label": "reads/writes tasks"
+    },
+    {
+      "id": "go-app-sa",
+      "source": "go-app",
+      "target": "go-sa",
+      "label": "uses identity"
+    },
+    {
+      "id": "node-app-sa",
+      "source": "node-app",
+      "target": "node-sa",
+      "label": "uses identity"
+    },
+    {
+      "id": "go-app-trace",
+      "source": "go-app",
+      "target": "cloud-trace",
+      "label": "sends traces"
+    },
+    {
+      "id": "node-app-trace",
+      "source": "node-app",
+      "target": "cloud-trace",
+      "label": "sends traces"
+    },
+    {
+      "id": "go-app-logs",
+      "source": "go-app",
+      "target": "cloud-logging",
+      "label": "sends logs"
+    },
+    {
+      "id": "node-app-logs",
+      "source": "node-app",
+      "target": "cloud-logging",
+      "label": "sends logs"
+    },
+    {
+      "id": "artifact-to-go",
+      "source": "artifact-registry",
+      "target": "go-app",
+      "label": "pulls container image",
+      "style": "dashed"
+    },
+    {
+      "id": "artifact-to-node",
+      "source": "artifact-registry",
+      "target": "node-app",
+      "label": "pulls container image",
+      "style": "dashed"
+    },
+    {
+      "id": "kms-to-artifact",
+      "source": "kms-key",
+      "target": "artifact-registry",
+      "label": "encrypts data",
+      "style": "dashed"
+    },
+    {
+      "id": "keyring-to-key",
+      "source": "kms-keyring",
+      "target": "kms-key",
+      "label": "contains"
+    }
+  ],
+  "name": "GCP Performance Explorer Architecture"
+}
