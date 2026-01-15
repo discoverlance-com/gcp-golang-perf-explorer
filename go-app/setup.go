@@ -47,7 +47,13 @@ func setupOpenTelemetry(ctx context.Context) (shutdown func(context.Context) err
 
 	// Use the Google Cloud Trace exporter.
 	// This will automatically convert OTel spans to Cloud Trace spans.
-	traceExporter, err := texporter.New(texporter.WithProjectID(os.Getenv("GOOGLE_CLOUD_PROJECT")))
+	var opts []texporter.Option
+	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
+	if projectID != "" {
+		opts = append(opts, texporter.WithProjectID(projectID))
+	}
+
+	traceExporter, err := texporter.New(opts...)
 	if err != nil {
 		return nil, errors.Join(err, shutdown(ctx))
 	}
