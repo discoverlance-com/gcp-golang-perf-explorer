@@ -1,0 +1,38 @@
+# Copy this file to terraform.tfvars and fill in your values
+# Example Terraform variables file for GCP Performance Explorer
+
+# Required: Your Google Cloud Project ID
+project_id = "your-gcp-project-id"
+
+# Optional: Override default region (default: us-central1)
+region = "us-central1"
+
+# Optional: Override default environment name (default: dev)
+environment = "dev"
+
+# Optional: Override default application name (default: performance-explorer)
+application_name = "performance-explorer"
+
+# Optional: Override default Firestore configuration
+firestore_database_id = "(default)"
+firestore_location_id = "nam5"
+
+# Optional: Override default Cloud Run configuration
+cloud_run_max_instances = 10
+cloud_run_memory        = "1Gi"
+cloud_run_cpu          = "1"
+cloud_run_concurrency  = 1000
+cloud_run_timeout      = "60s"
+
+# Security Configuration
+# Set to true for development/testing (allows unauthenticated access)
+# Set to false for production (requires authentication)
+allow_unauthenticated_access = false
+
+# List of users/service accounts authorized to invoke services (when authentication is required)
+# Examples:
+# authorized_users = [
+#   "user:developer@example.com",
+#   "serviceAccount:ci-cd@your-project.iam.gserviceaccount.com"
+# ]
+authorized_users = []
