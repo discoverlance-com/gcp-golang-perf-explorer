@@ -41,6 +41,8 @@ The Service Account (for Cloud Run) or User (for local dev) needs these roles:
 - **Logs Writer** (`roles/logging.logWriter`): To structured application logs.
 - **Monitoring Metric Writer** (`roles/monitoring.metricWriter`): (Optional) For custom metrics.
 
+If you deploy the application using gcloud CLI locally, ensure that the user account that was used to sign into the CLI has Cloud Run Admin, Artifact Registry Admin, Service Account User and Cloud Build Editor roles.
+
 ### 3. Firestore
 
 Ensure your project has a Firestore database created in `Native` mode.
