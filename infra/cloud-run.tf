@@ -18,8 +18,10 @@ resource "google_cloud_run_v2_service" "go_app" {
 
     # Resource limits and requests
     containers {
-      # Container image - update this after building and pushing your image
-      image = "${var.artifact_registry_location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.container_images.repository_id}/go-task-app:latest"
+      # Container image - using `us-docker.pkg.dev/cloudrun/container/hello` as a placeholder
+      # to allow the service to be created. After creation, build actual image and deploy a new revision.
+      # image = "${var.artifact_registry_location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.container_images.repository_id}/go-task-app:latest"
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
 
       # Resource allocation
       resources {
@@ -42,10 +44,6 @@ resource "google_cloud_run_v2_service" "go_app" {
         value = var.firestore_database_id
       }
 
-      env {
-        name  = "PORT"
-        value = "8080"
-      }
 
       # Health check configuration
       startup_probe {
@@ -128,8 +126,10 @@ resource "google_cloud_run_v2_service" "node_app" {
 
     # Resource limits and requests
     containers {
-      # Container image - update this after building and pushing your image
-      image = "${var.artifact_registry_location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.container_images.repository_id}/node-task-app:latest"
+      # Container image - using `us-docker.pkg.dev/cloudrun/container/hello` as a placeholder
+      # to allow the service to be created. After creation, build actual image and deploy a new revision.
+      # image = "${var.artifact_registry_location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.container_images.repository_id}/node-task-app:latest"
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
 
       # Resource allocation
       resources {
@@ -145,11 +145,6 @@ resource "google_cloud_run_v2_service" "node_app" {
       env {
         name  = "DATABASE_ID"
         value = var.firestore_database_id
-      }
-
-      env {
-        name  = "PORT"
-        value = "8080"
       }
 
       # Health check configuration

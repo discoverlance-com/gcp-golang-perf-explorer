@@ -91,11 +91,13 @@ output "build_commands" {
   value = {
     go_app = {
       configure_docker = "gcloud auth configure-docker ${var.artifact_registry_location}-docker.pkg.dev"
-      build_and_push   = "cd go-app && gcloud builds submit --tag ${var.artifact_registry_location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.container_images.repository_id}/go-task-app:latest"
+      build_and_push   = "gcloud builds submit ..\\go-app --tag ${var.artifact_registry_location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.container_images.repository_id}/go-task-app:latest"
+      deploy_image     = "gcloud run deploy ${google_cloud_run_v2_service.go_app.name} --image ${var.artifact_registry_location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.container_images.repository_id}/go-task-app:latest --region ${var.region}"
     }
     node_app = {
       configure_docker = "gcloud auth configure-docker ${var.artifact_registry_location}-docker.pkg.dev"
-      build_and_push   = "cd node-app && gcloud builds submit --tag ${var.artifact_registry_location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.container_images.repository_id}/node-task-app:latest"
+      build_and_push   = "gcloud builds submit ..\\node-app --tag ${var.artifact_registry_location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.container_images.repository_id}/node-task-app:latest"
+      deploy_image     = "gcloud run deploy ${google_cloud_run_v2_service.node_app.name} --image ${var.artifact_registry_location}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.container_images.repository_id}/node-task-app:latest --region ${var.region}"
     }
   }
 }
