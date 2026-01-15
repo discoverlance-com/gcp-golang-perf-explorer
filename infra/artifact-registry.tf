@@ -19,27 +19,36 @@ resource "google_artifact_registry_repository" "container_images" {
 
   # Cleanup policy to manage repository size
   cleanup_policy_dry_run = false
+
+  # Policy 1: Keep the most recent 10 versions (protects them from deletion)
   cleanup_policies {
     id     = "keep-recent-versions"
-    action = "DELETE"
-
-    condition {
-      tag_state  = "TAGGED"
-      newer_than = "604800s" # 7 days
-    }
+    action = "KEEP"
 
     most_recent_versions {
       keep_count = 10
     }
   }
 
+  # Policy 2: Delete tagged versions older than 7 days (subject to KEEP rules above)
+  cleanup_policies {
+    id     = "delete-old-versions"
+    action = "DELETE"
+
+    condition {
+      tag_state  = "TAGGED"
+      older_than = "604800s" # 7 days
+    }
+  }
+
+  # Policy 3: Delete untagged versions older than 1 day
   cleanup_policies {
     id     = "delete-untagged"
     action = "DELETE"
 
     condition {
       tag_state  = "UNTAGGED"
-      newer_than = "86400s" # 1 day
+      older_than = "86400s" # 1 day
     }
   }
 }
