@@ -48,9 +48,14 @@ func setupOpenTelemetry(ctx context.Context) (shutdown func(context.Context) err
 	// Use the Google Cloud Trace exporter.
 	// This will automatically convert OTel spans to Cloud Trace spans.
 	var opts []texporter.Option
-	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
-	if projectID != "" {
+
+	// Use our helper to find the Project ID
+	projectID, err := getProjectID(ctx)
+	if err == nil && projectID != "" {
+		slog.InfoContext(ctx, "initializing cloud trace", slog.String("project_id", projectID))
 		opts = append(opts, texporter.WithProjectID(projectID))
+	} else {
+		slog.WarnContext(ctx, "project ID not detected for trace, falling back to ADC")
 	}
 
 	traceExporter, err := texporter.New(opts...)

@@ -24,10 +24,25 @@ type Task struct {
 	CreatedAt time.Time `firestore:"created_at"`
 }
 
+func getProjectID(_ctx context.Context) (string, error) {
+	if pid := os.Getenv("GOOGLE_CLOUD_PROJECT"); pid != "" {
+		return pid, nil
+	}
+
+	// 2. Try Metadata Server (Cloud Run / GCE)
+	// if metadata.OnGCE() {
+	// 	return metadata.ProjectIDWithContext(ctx)
+	// }
+
+	// 3. Fallback (client libraries might find ADC, but we want to know)
+	return "", fmt.Errorf("project ID not found in env or metadata")
+}
+
 func initFirestore(ctx context.Context) error {
-	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
-	if projectID == "" {
-		// Fallback detection if needed, or error.
+	projectID, err := getProjectID(ctx)
+	if err != nil {
+		slog.WarnContext(ctx, "project ID detection failed (will rely on ADC default)", slog.Any("error", err))
+		// continue with empty string, letting library try its best
 	}
 
 	databaseID := os.Getenv("DATABASE_ID")
@@ -35,7 +50,7 @@ func initFirestore(ctx context.Context) error {
 		databaseID = "(default)"
 	}
 
-	var err error
+	slog.InfoContext(ctx, "initializing firestore", slog.String("project_id", projectID), slog.String("database_id", databaseID))
 
 	firestoreClient, err = firestore.NewClientWithDatabase(ctx, projectID, databaseID)
 	if err != nil {
