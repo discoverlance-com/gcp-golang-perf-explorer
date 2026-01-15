@@ -21,7 +21,7 @@ resource "google_kms_crypto_key" "artifact_registry" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false # change to true to prevent accidental deletion
   }
 
   labels = local.common_labels

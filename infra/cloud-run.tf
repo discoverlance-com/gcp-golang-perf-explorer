@@ -98,6 +98,10 @@ resource "google_cloud_run_v2_service" "go_app" {
     percent = 100
   }
 
+  lifecycle {
+    prevent_destroy = false # change to true to prevent accidental deletion
+  }
+
   depends_on = [
     google_project_service.required_apis,
     google_service_account.go_app,
@@ -198,6 +202,10 @@ resource "google_cloud_run_v2_service" "node_app" {
   traffic {
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
     percent = 100
+  }
+
+  lifecycle {
+    prevent_destroy = false # change to true to prevent accidental deletion
   }
 
   depends_on = [
