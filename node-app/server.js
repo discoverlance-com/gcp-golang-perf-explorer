@@ -1,12 +1,17 @@
 const express = require("express");
 const { Firestore } = require("@google-cloud/firestore");
 const path = require("path");
+const logger = require("./logger");
+const pinoHttp = require("pino-http")({ logger });
 
 const app = express();
 const port = process.env.PORT || 8080;
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+
+// Use Pino HTTP middleware for request logging
+app.use(pinoHttp);
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -41,7 +46,7 @@ app.get("/", async (req, res) => {
     const duration = getDuration(req);
     res.render("index", { tasks, duration });
   } catch (err) {
-    console.error("Error getting tasks:", err);
+    logger.error(err, "Error getting tasks");
     res.status(500).send("Internal Server Error");
   }
 });
@@ -61,10 +66,11 @@ app.post("/create", async (req, res) => {
         title,
         created_at: Date.now(),
       });
+      logger.info({ title }, "Task created");
     }
     res.redirect("/");
   } catch (err) {
-    console.error("Error creating task:", err);
+    logger.error(err, "Error creating task");
     res.status(500).send("Internal Server Error");
   }
 });
@@ -74,13 +80,14 @@ app.post("/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
     await collection.doc(id).delete();
+    logger.info({ taskId: id }, "Task deleted");
     res.redirect("/");
   } catch (err) {
-    console.error("Error deleting task:", err);
+    logger.error(err, "Error deleting task");
     res.status(500).send("Internal Server Error");
   }
 });
 
 app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+  logger.info(`Server listening on port ${port}`);
 });

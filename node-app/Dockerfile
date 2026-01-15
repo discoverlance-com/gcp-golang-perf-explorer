@@ -7,4 +7,4 @@ RUN npm install --only=production
 
 COPY . .
 
-CMD [ "node", "server.js" ]
+CMD [ "node", "--require", "./instrumentation.js", "server.js" ]

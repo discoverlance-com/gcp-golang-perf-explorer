@@ -15,6 +15,28 @@ This is a simple Node.js application built with Express and EJS, using Google Cl
 - Google Cloud Project with Firestore enabled
 - Google Cloud SDK (gcloud) installed
 
+## APIs to Enable
+
+The following APIs must be enabled in your Google Cloud Project:
+
+- **Cloud Trace API**: `cloudtrace.googleapis.com`
+- **Cloud Logging API**: `logging.googleapis.com`
+- **Cloud Monitoring API**: `monitoring.googleapis.com`
+- **Telemetry API**: `telemetry.googleapis.com`
+
+  ```bash
+  gcloud services enable cloudtrace.googleapis.com logging.googleapis.com monitoring.googleapis.com telemetry.googleapis.com
+  ```
+
+## IAM Permissions
+
+The user or service account running this application (locally or on Cloud Run) requires the following IAM roles:
+
+- **Cloud Datastore User** (`roles/datastore.user`): To read and write to Firestore.
+- **Logs Writer** (`roles/logging.logWriter`): To write logs to Cloud Logging.
+- **Cloud Trace Agent** (`roles/cloudtrace.agent`): To write trace data.
+- **Monitoring Metric Writer** (`roles/monitoring.metricWriter`): To write custom metrics.
+
 ## Setup
 
 1. **Install dependencies:**
