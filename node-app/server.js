@@ -15,6 +15,10 @@ app.use(pinoHttp);
 
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/ping", (req, res) => {
+  res.send("I am alive!");
+});
+
 // Initialize Firestore
 const firestoreOptions = {};
 if (process.env.DATABASE_ID) {

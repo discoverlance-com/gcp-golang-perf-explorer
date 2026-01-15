@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Go - Perf Explorer</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      .banner {
+        background-color: #e0f7fa;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #006064;
+        color: #006064;
+      }
+      .task {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .add-btn {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .delete-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner">Request Duration: {{.Duration}} ms</div>
+
+    <h1>Tasks</h1>
+
+    <a href="/create" class="add-btn">Create New Task</a>
+
+    <div class="task-list">
+      {{if not .Tasks}}
+      <p>No tasks found.</p>
+      {{else}} {{range .Tasks}}
+      <div class="task">
+        <span>{{.Title}}</span>
+        <form action="/delete/{{.ID}}" method="POST" style="margin: 0">
+          <button type="submit" class="delete-btn">Delete</button>
+        </form>
+      </div>
+      {{end}} {{end}}
+    </div>
+  </body>
+</html>
