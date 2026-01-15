@@ -22,6 +22,7 @@ This Terraform configuration provisions:
    - Ensure your account has the following roles:
      - **Cloud KMS Admin** (`roles/cloudkms.admin`) for managing encryption keys
      - **Cloud Datastore Owner** (`roles/datastore.owner`) for database creation
+     - **Service Account Admin** (`roles/iam.serviceAccountAdmin`) for managing the service accounts
      - **Editor** or **Owner** (recommended) for general resource creation but you can perform the actions without it.
 4. **Billing**: Ensure billing is enabled on your GCP project
 
@@ -124,7 +125,16 @@ Requires `jq` to be installed.
    Invoke-Expression $out.build_commands.value.node_app.deploy_image
    ```
 
-### 4. Access Your Applications
+### 4. Update Terraform Configuration (Important)
+
+The current Terraform configuration uses a placeholder image. To prevent Terraform from reverting your services to the "hello world" image on future runs, you must update the configuration:
+
+1. Open `infra/cloud-run.tf`.
+2. Find the `image` attribute in both `google_cloud_run_v2_service` blocks.
+3. Comment out the placeholder image (`us-docker.pkg.dev/cloudrun/container/hello`).
+4. Uncomment the real Artifact Registry image path.
+
+### 5. Access Your Applications
 
 Get the URLs from Terraform outputs:
 
