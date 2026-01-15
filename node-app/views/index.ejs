@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node - Perf Explorer</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      .banner {
+        background-color: #e0f7fa;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #006064;
+        color: #006064;
+      }
+      .task {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .add-btn {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .delete-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner">Request Duration: <%= duration %> ms</div>
+
+    <h1>Tasks</h1>
+
+    <a href="/create" class="add-btn">Create New Task</a>
+
+    <div class="task-list">
+      <% if (tasks.length === 0) { %>
+      <p>No tasks found.</p>
+      <% } else { %> <% tasks.forEach(task => { %>
+      <div class="task">
+        <span><%= task.title %></span>
+        <form action="/delete/<%= task.id %>" method="POST" style="margin: 0">
+          <button type="submit" class="delete-btn">Delete</button>
+        </form>
+      </div>
+      <% }) %> <% } %>
+    </div>
+  </body>
+</html>

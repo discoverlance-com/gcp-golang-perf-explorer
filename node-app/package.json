@@ -1,0 +1,17 @@
+{
+  "name": "node-task-app",
+  "version": "1.0.0",
+  "description": "Simple Node.js server for Cloud Run with Firestore",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^8.2.0",
+    "ejs": "^4.0.1",
+    "express": "^5.2.1"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
