@@ -33,7 +33,7 @@ resource "google_kms_crypto_key_iam_binding" "artifact_registry_encryption" {
   role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
 
   members = [
-    "serviceAccount:service-${data.google_project.current.number}@containerregistry.iam.gserviceaccount.com"
+    "serviceAccount:service-${data.google_project.current.number}@gcp-sa-artifactregistry.iam.gserviceaccount.com"
   ]
 }
 
