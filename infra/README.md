@@ -19,6 +19,10 @@ This Terraform configuration provisions:
 1. **Google Cloud Project**: Create a GCP project and note the project ID
 2. **Terraform**: Install Terraform >= 1.0
 3. **Google Cloud SDK**: Install and authenticate with `gcloud auth login`
+   - Ensure your account has the following roles:
+     - **Cloud KMS Admin** (`roles/cloudkms.admin`) for managing encryption keys
+     - **Cloud Datastore Owner** (`roles/datastore.owner`) for database creation
+     - **Editor** or **Owner** (recommended) for general resource creation but you can perform the actions without it.
 4. **Billing**: Ensure billing is enabled on your GCP project
 
 ## Quick Start
@@ -54,20 +58,71 @@ terraform apply
 
 ### 3. Build and Deploy Applications
 
-After Terraform completes, use the output commands to build and deploy your applications:
+The initial `terraform apply` deploys a placeholder "hello world" container to satisfy Cloud Run's requirements. You must build and deploy your actual application code.
 
-```bash
-# Configure Docker for Artifact Registry
-terraform output -json build_commands | jq -r '.go_app.configure_docker'
+#### Option A: Bash (Linux / Mac / WSL)
 
-# Build and push Go application
-cd ../go-app
-terraform output -json build_commands | jq -r '.go_app.build_and_push'
+Requires `jq` to be installed.
 
-# Build and push Node.js application
-cd ../node-app
-terraform output -json build_commands | jq -r '.node_app.build_and_push'
-```
+1. **Configure Docker Auth**:
+
+   ```bash
+   terraform output -json build_commands | jq -r '.go_app.configure_docker' | bash
+   ```
+
+2. **Go App: Build & Deploy**:
+
+   ```bash
+   # Build and Push
+   terraform output -json build_commands | jq -r '.go_app.build_and_push' | bash
+
+   # Deploy
+   terraform output -json build_commands | jq -r '.go_app.deploy_image' | bash
+   ```
+
+3. **Node App: Build & Deploy**:
+
+   ```bash
+   # Build and Push
+   terraform output -json build_commands | jq -r '.node_app.build_and_push' | bash
+
+   # Deploy
+   terraform output -json build_commands | jq -r '.node_app.deploy_image' | bash
+   ```
+
+#### Option B: PowerShell (Windows)
+
+1. **Load Commands into Variable**:
+
+   ```powershell
+   $out = terraform output -json | ConvertFrom-Json
+   ```
+
+2. **Configure Docker Auth**:
+
+   ```powershell
+   Invoke-Expression $out.build_commands.value.go_app.configure_docker
+   ```
+
+3. **Go App: Build & Deploy**:
+
+   ```powershell
+   # Build and Push
+   Invoke-Expression $out.build_commands.value.go_app.build_and_push
+
+   # Deploy
+   Invoke-Expression $out.build_commands.value.go_app.deploy_image
+   ```
+
+4. **Node App: Build & Deploy**:
+
+   ```powershell
+   # Build and Push
+   Invoke-Expression $out.build_commands.value.node_app.build_and_push
+
+   # Deploy
+   Invoke-Expression $out.build_commands.value.node_app.deploy_image
+   ```
 
 ### 4. Access Your Applications
 
